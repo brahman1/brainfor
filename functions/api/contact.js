@@ -1,4 +1,4 @@
-// The recipient is stored only in the Cloudflare production secret.
+// Cloudflare Email Service REST API. Credentials and recipient stay on the server.
 const reply = (body, status = 200) => Response.json(body, {
   status, headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' }
 });
@@ -8,8 +8,11 @@ export async function onRequest({ request, env }) {
   const url = new URL(request.url);
   if (request.headers.get('Origin') !== url.origin) return reply({ success: false, code: 'origin' }, 403);
   if (!request.headers.get('Content-Type')?.includes('application/json')) return reply({ success: false }, 415);
-  const destination = env.FORM_SUBMIT_DESTINATION || '';
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(destination) && !/^[a-zA-Z0-9_-]{16,128}$/.test(destination)) {
+  // Keep the existing private recipient during migration; no FormSubmit request is made.
+  const destination = env.CONTACT_RECIPIENT || env.FORM_SUBMIT_DESTINATION || '';
+  const accountId = env.CLOUDFLARE_ACCOUNT_ID || '';
+  const token = env.CLOUDFLARE_EMAIL_TOKEN || '';
+  if (!/^[^\s@<>\r\n]+@[^\s@<>\r\n]+\.[^\s@<>\r\n]+$/.test(destination) || !/^[a-f0-9]{32}$/i.test(accountId) || !token) {
     return reply({ success: false, code: 'configuration' }, 503);
   }
   try {
@@ -37,24 +40,29 @@ export async function onRequest({ request, env }) {
       return reply({ success: false, code: 'validation' }, 400);
     }
     // Only these fields are forwarded; clients cannot set recipients or webhooks.
-    const payload = {
-      name, email, message,
-      Entreprise: clean(input.Entreprise, 200),
-      Téléphone: clean(input.Téléphone, 80),
-      Services: clean(input.Services, 500),
-      Budget: clean(input.Budget, 200),
-      Échéance: clean(input.Échéance, 200),
-      _replyto: email,
-      _subject: '[Brainfor] Demande de projet — ' + name.replace(/[\r\n]/g, ' '),
-      _template: 'table', _honey: '', _url: url.origin + '/'
-    };
-    const upstream = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(destination), {
+    const textBody = [
+      'DEMANDE DE PROJET — Brainfor', '',
+      'Nom : ' + name, 'Entreprise : ' + (clean(input.Entreprise, 200) || 'Non renseignée'),
+      'E-mail : ' + email, 'Téléphone : ' + (clean(input.Téléphone, 80) || 'Non renseigné'), '',
+      'Besoins : ' + (clean(input.Services, 500) || 'À définir ensemble'),
+      'Budget indicatif : ' + (clean(input.Budget, 200) || 'À définir ensemble'),
+      'Échéance souhaitée : ' + (clean(input.Échéance, 200) || 'À définir ensemble'), '',
+      'LE PROJET', message, '',
+      'Ce document est un brief préparatoire. Il ne constitue ni un devis ni une commande.'
+    ].join('\n');
+    const upstream = await fetch('https://api.cloudflare.com/client/v4/accounts/' + accountId + '/email/sending/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', Accept: 'application/json',
-        Origin: url.origin, Referer: url.origin + '/'
+        Authorization: 'Bearer ' + token
       },
-      body: JSON.stringify(payload), signal: AbortSignal.timeout(15000)
+      body: JSON.stringify({
+        from: 'contact@brainfor.net', to: destination,
+        reply_to: email,
+        subject: '[Brainfor] Demande de projet — ' + name.replace(/[\r\n]/g, ' '),
+        text: textBody
+      }),
+      signal: AbortSignal.timeout(15000)
     });
     const text = await upstream.text();
     let result;
@@ -62,21 +70,21 @@ export async function onRequest({ request, env }) {
       console.warn('contact_provider_non_json', { status: upstream.status });
       return reply({ success: false, code: 'provider_unavailable' }, 502);
     }
-    const providerMessage = String(result?.message || '');
-    if (upstream.ok && /activat|confirm.{0,30}e.?mail|check.{0,30}e.?mail|verify.{0,30}e.?mail/i.test(providerMessage)) {
-      return reply({ success: false, message: 'activation required' });
-    }
-    if (!upstream.ok || (result?.success !== true && result?.success !== 'true')) {
+    if (!upstream.ok || result?.success !== true) {
       let code = 'provider_rejected';
-      if (/invalid.{0,40}email|email.{0,40}invalid|valid.{0,20}email/i.test(providerMessage)) code = 'invalid_email';
-      else if (/referer|referrer|web.?server|file:\/\//i.test(providerMessage)) code = 'provider_origin';
-      else if (/captcha|robot|bot|spam/i.test(providerMessage)) code = 'provider_protection';
-      else if (upstream.status === 429 || /limit|too many/i.test(providerMessage)) code = 'rate_limited';
+      if (upstream.status === 401 || upstream.status === 403 || upstream.status === 404) code = 'configuration';
+      else if (upstream.status === 429) code = 'rate_limited';
       // Log only a classification and HTTP status, never the message or addresses.
       console.warn('contact_provider_rejected', { status: upstream.status, code });
       return reply({ success: false, code }, 502);
     }
-    return reply({ success: true });
+    // Cloudflare success alone is insufficient: require acceptance of our fixed recipient.
+    const delivered = result.result?.delivered;
+    const queued = result.result?.queued;
+    const matches = list => Array.isArray(list) && list.some(address => typeof address === 'string' && address.toLowerCase() === destination.toLowerCase());
+    if (matches(delivered)) return reply({ success: true, status: 'delivered' });
+    if (matches(queued)) return reply({ success: true, status: 'queued' });
+    return reply({ success: false, code: 'provider_rejected' }, 502);
   } catch (error) {
     // Never return provider messages, recipient addresses or submission data.
     const code = error?.name === 'TimeoutError' || error?.name === 'AbortError' ? 'provider_timeout' : 'provider_unavailable';

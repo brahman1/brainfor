@@ -1,73 +1,50 @@
 # Brainfor
 
-## Réception sur Cloudflare Pages
+Site français d’ingénierie informatique en Algérie : développement web, mobile, bureau et solutions sur mesure. Identité : monogramme B original, bleu marine, bleu acier et blanc. Réalisations : Sendlyy, Floutons et EduBest (pas encore en ligne). Les démonstrations Flux et Rendez restent fictives.
 
-Le navigateur envoie le formulaire à `/api/contact`. La fonction `functions/api/contact.js` transmet uniquement les champs autorisés à FormSubmit. Le destinataire reste dans le secret de production Cloudflare `FORM_SUBMIT_DESTINATION`, jamais dans les fichiers publics. Le secret peut contenir l'adresse de réception déjà activée ou son identifiant anonyme FormSubmit. Ne pas le copier dans ce dépôt.
+## Publication sur Cloudflare Pages
 
-Commande Cloudflare : `cp dist/config.example.js dist/config.js`. Dossier de sortie : `dist`. Les déploiements suivants sont déclenchés par les commits de `main`. La fonction doit être déployée avec le site ; un simple serveur de fichiers statiques ne permet pas l'envoi via ce relais. La boîte `contact@brainfor.net` reste à créer pour recevoir des e-mails envoyés directement à cette adresse.
+Branche : `main`. Commande : `cp dist/config.example.js dist/config.js`. Sortie : `dist`. Le dossier `functions` à la racine fournit `/api/contact`. Une publication uniquement statique ne suffit pas pour envoyer les demandes.
 
-Site d’ingénierie informatique en Algérie. Identité fournie par l’utilisateur : monogramme B, bleu marine #132D49, bleu acier #4B759E, blanc. Valeurs : Ingénierie — Fiabilité — Innovation.
+## Formulaire : Cloudflare Email Service
 
-## Logo
+FormSubmit est remplacé par l’API native Cloudflare Email Service, appelée uniquement par la fonction serveur. Le navigateur ne reçoit aucun jeton ni adresse de réception privée. Le visiteur vérifie son brief, puis choisit de l’envoyer, de le copier ou de le télécharger. Le code distingue une livraison signalée par Cloudflare d’une mise en file d’attente ; il ne confirme pas la lecture dans la boîte de réception. Une erreur conserve le formulaire.
 
-Le PNG original est conservé sans modification dans dist/assets/brainfor-monogram.png. Des fenêtres SVG cadrent son affichage pour retirer visuellement les marges transparentes, sans redessiner ni retoucher le fichier.
+### Configuration de production requise
 
-## Fonctionnement
+Dans Pages > brainfor > Settings > Variables and secrets > Production, définir :
 
-Site HTML/CSS/JS sans compilation. Servir dist via HTTP. Présentation, expertises détaillées, concepts interactifs, méthode, FAQ et formulaire de brief. Données de démonstration fictives.
+| Nom | Type | Valeur |
+| --- | --- | --- |
+| `CLOUDFLARE_ACCOUNT_ID` | Texte | Identifiant du compte Cloudflare propriétaire du domaine |
+| `CLOUDFLARE_EMAIL_TOKEN` | Secret | Jeton Cloudflare autorisé à envoyer des e-mails pour ce compte |
+| `CONTACT_RECIPIENT` | Secret | Adresse de réception vérifiée dans Email Routing |
 
-## Contact
+Pendant la migration, la fonction peut réutiliser la valeur du secret existant `FORM_SUBMIT_DESTINATION` comme adresse de réception, uniquement si `CONTACT_RECIPIENT` est absent. Malgré son ancien nom, aucune requête vers FormSubmit n’est faite. Une ancienne valeur contenant un identifiant anonyme au lieu d’une adresse n’est pas utilisable : renseigner `CONTACT_RECIPIENT` avec l’adresse vérifiée.
 
-La réception est configurée vers la boîte de réception privée du propriétaire via FormSubmit. Le visiteur vérifie son brief puis confirme l’envoi depuis le site. Le téléchargement et la copie restent disponibles en alternatives. Le brouillon e-mail est proposé seulement lorsque l’adresse publique est active. Aucune base de prospects n’est hébergée par le site ; FormSubmit traite les soumissions pour leur acheminement.
+Activer le domaine `brainfor.net` dans Cloudflare Email Service et les enregistrements DNS demandés. L’expéditeur est fixé côté serveur à `contact@brainfor.net`. La destination est fixée par le secret serveur ; le visiteur ne peut ni la choisir ni envoyer des copies. Son adresse sert uniquement au Reply-To. Vérifier l’adresse de destination dans l’e-mail reçu de Cloudflare. Créer un jeton limité à la permission d’envoi et au compte concerné ; ne jamais le publier dans Git, `dist` ou la conversation. Redéployer après toute modification des variables.
 
-## Avant ouverture au public
+L’envoi vers une destination vérifiée est gratuit selon la documentation Cloudflare. L’accès à Email Sending et les droits du compte restent des prérequis : si l’API n’est pas activée ou si le jeton manque, le formulaire affiche une erreur de configuration et conserve le brief. Le code et un push ne créent ni ces droits ni ces secrets.
 
-Renseigner les coordonnées et les mentions d’entreprise, les modalités de services et l’hébergement. La marque Brainfor remplace le nom de travail initial ; elle ne préjuge pas de l’immatriculation de l’entreprise.
+Documentation : https://developers.cloudflare.com/email-service/api/send-emails/rest-api/
+Tarifs : https://developers.cloudflare.com/email-service/platform/pricing/
 
-## Technique
+### Adresse publique et redirection
 
-Typographie du nom : Inter 800. Titres : Space Grotesk. Corps : Inter. Polices chargées via Google Fonts avec repli système. Aucun outil de mesure ni cookie applicatif ajouté. Publication privée via Sites et projet existant conservé.
+`publicEmail` vaut `contact@brainfor.net`. `publicEmailReady` reste `false` tant que la redirection n’a pas été confirmée. Après activation de la règle `contact@brainfor.net` vers la boîte vérifiée, passer ce champ à `true` dans le modèle de configuration pour activer les liens mailto et le bouton « Ouvrir ma messagerie ». Répondre depuis la boîte Outlook affiche l’adresse Outlook sauf configuration séparée de l’envoi sous le domaine.
 
-## Réalisations
+## Confidentialité
 
-Sendlyy (https://sendlyy.net/) et Floutons (https://floutons.com/) sont liés à leurs sites publics, avec des captures réelles de leurs pages d’accueil. EduBest, plateforme de gestion scolaire, est présenté avec la mention « Bientôt en ligne », sans URL inventée. Les deux démonstrations fictives restent accessibles dans un panneau distinct.
+Le formulaire passe par Cloudflare et la messagerie de réception. Aucune base de prospects propre au site. Les erreurs et journaux du code ne contiennent ni contenu des demandes, ni destinataire, ni jeton. Le code conserve les contrôles d’origine, le champ piège et les limites de taille. Les anciennes protections du prestataire FormSubmit ne sont plus utilisées ; les protections Cloudflare de production sont à configurer selon le trafic.
 
-## Réception des demandes — FormSubmit
+## Interface
 
-Adresse : la boîte de réception privée du propriétaire. Le visiteur vérifie son brief puis confirme l’envoi. Le site transmet les champs à FormSubmit par POST AJAX ; le service achemine un e-mail avec Reply-To correspondant au visiteur. Aucune clé SMTP côté navigateur. Les états accepté, activation, erreur et résultat incertain sont distincts. Le formulaire est conservé en cas d’échec. Un champ piège complète les protections du service.
+La sélection de texte utilise un fond bleu clair et du texte bleu marine, sur les pages et dans les briefs. Les fichiers CSS et scripts portent une version dans leur URL pour éviter les anciennes ressources en cache. Le PNG original du logo est conservé dans `dist/assets/brainfor-monogram.png`.
 
-L’activation a été confirmée par le propriétaire et la réception d’un e-mail de test dans Outlook a été confirmée. En cas de nouvelle adresse ou de nouvelle configuration nécessitant une activation, suivre le lien FormSubmit reçu par e-mail, vérifier les courriers indésirables et confirmer une vraie réception. Les protections CAPTCHA n’ont pas été désactivées. Le téléchargement et la copie restent disponibles.
+## Informations à compléter
 
-La notice de confidentialité mentionne FormSubmit, le destinataire, la finalité et la conservation de 30 jours annoncée dans la documentation du prestataire. Les paramètres antérieurs de coordonnées non renseignées restent à compléter.
+Coordonnées et immatriculation de l’entreprise, mentions légales, modalités de service. Les concepts interactifs restent des démonstrations fictives. Les polices Inter et Space Grotesk sont chargées depuis Google Fonts.
 
-## Adresse publique
+## Historique des tests
 
-L’adresse affichée est contact@brainfor.net. Cette boîte n’est pas encore créée : publicEmailReady reste false et aucun lien mailto vers cette adresse n’est proposé. Le formulaire continue de fonctionner avec son destinataire de réception actuel. La ligne E-mail dans le brief est celle saisie par le visiteur.
-
-Le champ formSubmitId permet de remplacer l’adresse de destination dans le point d’accès public par l’identifiant anonyme fourni par FormSubmit, sans modifier le destinataire réel. Tant que ce champ est vide, l’adresse de réception reste nécessaire dans la configuration technique du service.
-
-## Développement local
-
-Le site ne nécessite aucune compilation ni dépendance npm. Avant le premier lancement, copier `dist/config.example.js` en `dist/config.js` et renseigner la configuration. Pour le prévisualiser avec Python :
-
-```sh
-python -m http.server 4173 --directory dist
-```
-
-Ouvrir http://localhost:4173. Le formulaire doit être servi par HTTP(S), pas ouvert en fichier local. Les tests isolent le service d’envoi et n’envoient aucun e-mail :
-
-```sh
-node tests/contact-send.test.cjs
-```
-
-## Déploiement statique
-
-Publier le contenu de `dist/`. Sur un hébergeur demandant un dossier de sortie, choisir `dist` et aucune commande de compilation. `.openai/hosting.json` conserve l’identité du site publié via Sites. Aucun workflow de déploiement automatique n’est installé dans ce dépôt.
-
-## Configuration de réception et confidentialité
-
-Le dépôt est public. `dist/config.js`, qui contient la configuration personnelle de réception de la version déjà publiée, est volontairement exclu de Git. Le dépôt fournit `dist/config.example.js` avec des valeurs publiques et un destinataire vide. Copier ce modèle en `dist/config.js` pour lancer ou déployer une nouvelle instance.
-
-Pour activer l’envoi, renseigner `formSubmitId` avec l’identifiant anonyme fourni par FormSubmit. Cet identifiant de formulaire est conçu pour être public et remplace l’adresse de réception dans le point d’accès. Aucune clé de compte ni mot de passe n’est nécessaire. Sans identifiant ou destinataire configuré, l’envoi automatique n’est pas disponible ; la préparation, la copie et le téléchargement du brief restent utilisables.
-
-Ne renseigner `email` avec une adresse personnelle que si l’on accepte qu’elle soit accessible dans les fichiers du site déployé. L’exclusion Git protège ce dépôt mais ne rend pas privée une valeur incluse dans des fichiers servis au navigateur. `publicEmail` contrôle uniquement l’adresse affichée.
+Le dossier `tests` contient l’ancienne suite du connecteur FormSubmit et ne couvre pas le nouveau service Cloudflare. Aucun test n’a été ajouté ni exécuté pour cette migration, conformément à la demande du propriétaire. Ne pas utiliser cette ancienne suite pour valider l’envoi Cloudflare.

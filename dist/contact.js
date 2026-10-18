@@ -1,38 +1,32 @@
 (() => {
   'use strict';
-  const fail = (code, message) => Object.assign(new Error(message), {code});
+  const fail = (code, message) => Object.assign(new Error(message), { code });
   async function send(details, fetcher = globalThis.fetch, timeoutMs = 20000) {
     const config = window.STUDIO_CONFIG || {};
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const destination = config.formSubmitId || config.email || '';
-    const endpoint = config.contactEndpoint === '/api/contact' ? config.contactEndpoint : '';
-    if (config.contactProvider !== 'formsubmit' || (!endpoint && !/^[a-zA-Z0-9_-]{16,128}$/.test(destination) && !emailPattern.test(destination))) throw fail('configuration', 'Réception non configurée.');
-    if (!emailPattern.test(details.email || '') || !String(details.name || '').trim() || String(details.message || '').trim().length < 20 || details.honey) throw fail('validation', 'Demande non valide.');
+    if (config.contactProvider !== 'cloudflare' || config.contactEndpoint !== '/api/contact') throw fail('configuration', 'Réception non configurée.');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(details.email || '') || !String(details.name || '').trim() || String(details.message || '').trim().length < 20 || details.honey) throw fail('validation', 'Demande non valide.');
     const payload = {
       name: String(details.name).trim(), email: String(details.email).trim(),
-      Entreprise: details.company || 'Non renseignée', Téléphone: details.phone || 'Non renseigné',
-      Services: details.services || 'À définir ensemble', Budget: details.budget || 'À définir ensemble',
-      Échéance: details.timeline || 'À définir ensemble', message: String(details.message).trim(),
-      _replyto: String(details.email).trim(), _subject: '[Brainfor] Demande de projet — ' + String(details.name).trim(),
-      _template: 'table', _honey: '', _url: details.source || ''
+      Entreprise: details.company || '', Téléphone: details.phone || '',
+      Services: details.services || '', Budget: details.budget || '',
+      Échéance: details.timeline || '', message: String(details.message).trim(), _honey: details.honey || ''
     };
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
     try {
-      const response = await fetcher(endpoint || 'https://formsubmit.co/ajax/' + encodeURIComponent(destination), {
-        method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
-        body:JSON.stringify(payload), credentials:'omit', signal:controller.signal
+      const response = await fetcher('/api/contact', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload), credentials: 'omit', signal: controller.signal
       });
       const body = await response.json();
-      const knownCodes = ['origin', 'configuration', 'validation', 'invalid_email', 'provider_origin', 'provider_protection', 'rate_limited', 'provider_timeout', 'provider_unavailable', 'provider_rejected'];
-      if (!response.ok) throw fail(knownCodes.includes(body.code) ? body.code : 'rejected', 'Le service n’a pas confirmé la prise en charge.');
-      if (/activat|confirm.{0,30}e.?mail|check.{0,30}e.?mail|verify.{0,30}e.?mail/i.test(String(body.message || ''))) return {status:'activation'};
-      if (body.success !== true && body.success !== 'true') throw fail('rejected', 'Le service n’a pas accepté la demande.');
-      return {status:'accepted'};
+      const knownCodes = ['origin', 'configuration', 'validation', 'invalid_email', 'rate_limited', 'provider_timeout', 'provider_unavailable', 'provider_rejected'];
+      if (!response.ok || body.success !== true) throw fail(knownCodes.includes(body.code) ? body.code : 'provider_rejected', 'L’envoi n’a pas été accepté.');
+      if (body.status !== 'delivered' && body.status !== 'queued') throw fail('uncertain', 'L’envoi n’a pas pu être confirmé.');
+      return { status: body.status };
     } catch (error) {
       if (error.code) throw error;
       throw fail('uncertain', 'L’envoi n’a pas pu être confirmé.');
     } finally { clearTimeout(timer); }
   }
-  window.BRAINFOR_CONTACT = Object.freeze({send});
+  window.BRAINFOR_CONTACT = Object.freeze({ send });
 })();
