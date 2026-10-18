@@ -43,6 +43,8 @@ La sélection de texte utilise un fond bleu clair et du texte bleu marine, sur l
 
 ## Référencement Google
 
+Les aperçus de partage utilisent l’image officielle `dist/assets/brainfor-social-v1.png` (1200 × 630), composée avec le logo original et l’identité Brainfor. Les balises Open Graph et Twitter indiquent son URL absolue, ses dimensions et son texte alternatif pour empêcher les plateformes de choisir une capture de projet du portfolio. Le SVG source est conservé à côté du PNG. Une plateforme peut conserver un ancien aperçu en cache : une nouvelle récupération du lien peut être nécessaire sur cette plateforme après publication.
+
 La page contient la balise de vérification Search Console fournie par le propriétaire, une URL canonique `https://brainfor.net/`, la directive `index, follow` et les métadonnées Open Graph du domaine. `dist/robots.txt` autorise l’exploration du contenu, exclut `/api/` et annonce `https://brainfor.net/sitemap.xml`. Le sitemap contient uniquement l’URL canonique de la page : les sections `#expertises`, `#projets`, etc. ne sont pas des pages distinctes.
 
 Après publication, valider la propriété Search Console correspondant à `https://brainfor.net/`, puis soumettre `sitemap.xml`. La vérification par balise HTML s’applique à une propriété de type préfixe d’URL ; une propriété de domaine utilise une vérification DNS. L’ajout de ces fichiers ne garantit ni une indexation immédiate ni un classement dans Google.
