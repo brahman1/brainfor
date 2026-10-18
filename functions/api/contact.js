@@ -72,7 +72,13 @@ export async function onRequest({ request, env }) {
     }
     if (!upstream.ok || result?.success !== true) {
       let code = 'provider_rejected';
-      if (upstream.status === 401 || upstream.status === 403 || upstream.status === 404) code = 'configuration';
+      const errorCodes = Array.isArray(result?.errors) ? result.errors.map(error => Number(error.code)) : [];
+      if (errorCodes.includes(10105)) code = 'provider_access';
+      else if (errorCodes.includes(10101) || errorCodes.includes(10103) || upstream.status === 401) code = 'provider_token';
+      else if (errorCodes.includes(10102)) code = 'provider_permission';
+      else if (errorCodes.includes(10203)) code = 'provider_disabled';
+      else if (upstream.status === 403) code = 'provider_permission';
+      else if (upstream.status === 404) code = 'provider_account';
       else if (upstream.status === 429) code = 'rate_limited';
       // Log only a classification and HTTP status, never the message or addresses.
       console.warn('contact_provider_rejected', { status: upstream.status, code });

@@ -102,7 +102,12 @@
           const errors = {
             validation: 'Vérifiez votre nom, votre adresse e-mail et la description du projet (20 caractères minimum).',
             invalid_email: 'Le service a refusé l’adresse e-mail saisie. Utilisez une véritable adresse à laquelle vous pouvez recevoir notre réponse.',
-            configuration: 'La réception des demandes via Cloudflare doit encore être activée par Brainfor. Vous pouvez aussi utiliser « Ouvrir ma messagerie ».',
+            configuration: 'Les paramètres serveur de réception de Brainfor sont incomplets. Vous pouvez conserver votre brief ou nous contacter par e-mail.',
+            provider_token: 'Cloudflare a refusé la clé d’envoi du site. Brainfor doit remplacer le jeton serveur.',
+            provider_permission: 'Cloudflare refuse l’autorisation d’envoi du site. Brainfor doit vérifier les permissions du service mail.',
+            provider_access: 'Cloudflare indique que ce compte n’a pas accès à l’API d’envoi utilisée. Brainfor doit adapter sa configuration de messagerie.',
+            provider_disabled: 'Cloudflare indique que l’envoi d’e-mails est désactivé pour ce domaine ou ce compte.',
+            provider_account: 'Cloudflare ne trouve pas le compte ou le service d’envoi configuré pour ce site.',
             origin: 'L’origine de la demande n’a pas été reconnue. Ouvrez le formulaire sur https://brainfor.net.',
             rate_limited: 'Le service limite temporairement les envois. Patientez avant de réessayer.',
             provider_timeout: 'Cloudflare n’a pas répondu dans le délai prévu. Avant de réessayer, vérifiez si la demande a été reçue pour éviter un doublon.',

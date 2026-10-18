@@ -19,7 +19,7 @@
         body: JSON.stringify(payload), credentials: 'omit', signal: controller.signal
       });
       const body = await response.json();
-      const knownCodes = ['origin', 'configuration', 'validation', 'invalid_email', 'rate_limited', 'provider_timeout', 'provider_unavailable', 'provider_rejected'];
+      const knownCodes = ['origin', 'configuration', 'validation', 'invalid_email', 'rate_limited', 'provider_timeout', 'provider_unavailable', 'provider_rejected', 'provider_access', 'provider_token', 'provider_permission', 'provider_disabled', 'provider_account'];
       if (!response.ok || body.success !== true) throw fail(knownCodes.includes(body.code) ? body.code : 'provider_rejected', 'L’envoi n’a pas été accepté.');
       if (body.status !== 'delivered' && body.status !== 'queued') throw fail('uncertain', 'L’envoi n’a pas pu être confirmé.');
       return { status: body.status };
