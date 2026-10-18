@@ -7,6 +7,7 @@ window.STUDIO_CONFIG = {
   "formSubmitId": "",
   "email": "",
   "contactProvider": "formsubmit",
+  "contactEndpoint": "/api/contact",
   "phone": "",
   "whatsapp": "",
   "city": "",

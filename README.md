@@ -1,5 +1,11 @@
 # Brainfor
 
+## Réception sur Cloudflare Pages
+
+Le navigateur envoie le formulaire à `/api/contact`. La fonction `functions/api/contact.js` transmet uniquement les champs autorisés à FormSubmit. Le destinataire reste dans le secret de production Cloudflare `FORM_SUBMIT_DESTINATION`, jamais dans les fichiers publics. Le secret peut contenir l'adresse de réception déjà activée ou son identifiant anonyme FormSubmit. Ne pas le copier dans ce dépôt.
+
+Commande Cloudflare : `cp dist/config.example.js dist/config.js`. Dossier de sortie : `dist`. Les déploiements suivants sont déclenchés par les commits de `main`. La fonction doit être déployée avec le site ; un simple serveur de fichiers statiques ne permet pas l'envoi via ce relais. La boîte `contact@brainfor.net` reste à créer pour recevoir des e-mails envoyés directement à cette adresse.
+
 Site d’ingénierie informatique en Algérie. Identité fournie par l’utilisateur : monogramme B, bleu marine #132D49, bleu acier #4B759E, blanc. Valeurs : Ingénierie — Fiabilité — Innovation.
 
 ## Logo

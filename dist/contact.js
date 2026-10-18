@@ -5,7 +5,8 @@
     const config = window.STUDIO_CONFIG || {};
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const destination = config.formSubmitId || config.email || '';
-    if (config.contactProvider !== 'formsubmit' || (!/^[a-zA-Z0-9_-]{16,128}$/.test(destination) && !emailPattern.test(destination))) throw fail('configuration', 'Réception non configurée.');
+    const endpoint = config.contactEndpoint === '/api/contact' ? config.contactEndpoint : '';
+    if (config.contactProvider !== 'formsubmit' || (!endpoint && !/^[a-zA-Z0-9_-]{16,128}$/.test(destination) && !emailPattern.test(destination))) throw fail('configuration', 'Réception non configurée.');
     if (!emailPattern.test(details.email || '') || !String(details.name || '').trim() || String(details.message || '').trim().length < 20 || details.honey) throw fail('validation', 'Demande non valide.');
     const payload = {
       name: String(details.name).trim(), email: String(details.email).trim(),
@@ -18,7 +19,7 @@
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
     try {
-      const response = await fetcher('https://formsubmit.co/ajax/' + encodeURIComponent(destination), {
+      const response = await fetcher(endpoint || 'https://formsubmit.co/ajax/' + encodeURIComponent(destination), {
         method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
         body:JSON.stringify(payload), credentials:'omit', signal:controller.signal
       });
