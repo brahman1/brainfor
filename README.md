@@ -1,5 +1,23 @@
 # Brainfor
 
+## Langues et référencement international
+
+Trois versions HTML complètes sont publiées : français à `/`, anglais à `/en/` et arabe à `/ar/`. Le sélecteur FR / EN / العربية est accessible dans l’en-tête, conserve la section courante lors d’un changement de langue et utilise de vrais liens explorables. Aucun changement automatique selon l’IP ou le navigateur.
+
+Les traductions couvrent le contenu, la navigation, les attributs accessibles, les formulaires et leurs briefs, les détails de prestations, les démonstrations, les messages d’erreur, les mentions légales et la confidentialité. Les noms de marques, les captures de produits originaux et les identifiants techniques ne sont pas traduits. L’arabe utilise `lang="ar"`, `dir="rtl"`, une feuille de style adaptée et une direction isolée pour les e-mails et téléphones.
+
+Chaque page possède son titre, sa description, sa canonical, son URL Open Graph et son aperçu social localisés. Les trois pages annoncent toutes les variantes `hreflang` (`fr`, `en`, `ar`, `x-default`), également présentes dans le sitemap. Les données structurées Organization / WebSite / WebPage décrivent l’organisation, les langues et la page courante sans inventer de coordonnées ou d’avis. `robots.txt` conserve l’accès aux trois versions et l’exclusion de `/api/`. La balise Google fournie est conservée.
+
+Les sources des traductions sont `locales/static.tsv` et `locales/dynamic.tsv` (français, anglais, arabe, séparés par `¦`). Après une modification de la page française ou de `dist/app.js`, générer les fichiers de langue avant de committer :
+
+```sh
+python scripts/build_locales.py
+```
+
+Le générateur écrit `dist/en/index.html`, `dist/ar/index.html`, leurs scripts de texte interactif et le sitemap ; il maintient les liens de langues sur la page française. Les fichiers générés sont versionnés : la commande Cloudflare existante peut rester inchangée. Les images de partage traduites et leurs SVG sources sont dans `dist/assets/`. Aucun service de traduction tiers n’est appelé à l’exécution.
+
+Cette livraison a été préparée sans lancer de tests ni utiliser le navigateur, conformément à la demande du propriétaire. L’indexation et le classement restent décidés par les moteurs de recherche. Dans Search Console, conserver la propriété Brainfor et soumettre le sitemap racine actualisé ; il contient les trois URL.
+
 Site français d’ingénierie informatique en Algérie : développement web, mobile, bureau et solutions sur mesure. Identité : monogramme B original, bleu marine, bleu acier et blanc. Réalisations : Sendlyy, Floutons et EduBest (pas encore en ligne). Les démonstrations Flux et Rendez restent fictives.
 
 ## Publication sur Cloudflare Pages
