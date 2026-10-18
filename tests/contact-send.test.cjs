@@ -1,0 +1,22 @@
+const fs=require('node:fs');const vm=require('node:vm');const assert=require('node:assert/strict');const path=require('node:path');
+const sandbox={window:{STUDIO_CONFIG:{email:'receiver@example.com',contactProvider:'formsubmit'}},AbortController,setTimeout,clearTimeout};
+vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../dist/contact.js'),'utf8'),sandbox);
+const send=sandbox.window.BRAINFOR_CONTACT.send;
+const details={name:'Essai',email:'visitor@example.com',message:'Un projet de test sans envoi réel.',services:'Web',source:'https://example.com/'};
+const response=(success,message='',ok=true)=>async(url,options)=>{assert.equal(url,'https://formsubmit.co/ajax/receiver%40example.com');assert.equal(options.method,'POST');assert.equal(options.credentials,'omit');const body=JSON.parse(options.body);assert.equal(body._replyto,details.email);assert.equal(body._template,'table');assert.equal(body.message,details.message);assert.equal(body._captcha,undefined);return {ok,json:async()=>({success,message})};};
+(async()=>{
+  assert.equal((await send(details,response('true'))).status,'accepted');
+  assert.equal((await send(details,response(true))).status,'accepted');
+  await assert.rejects(send(details,response('false')),error=>error.code==='rejected');
+  await assert.rejects(send(details,response(true,'',false)),error=>error.code==='rejected');
+  assert.equal((await send(details,response(false,'This form needs activation.'))).status,'activation');
+  await assert.rejects(send(details,async()=>{throw Error('Network failure');}),error=>error.code==='uncertain');
+  let called=false;await assert.rejects(send({...details,honey:'spam'},async()=>{called=true;}),error=>error.code==='validation');assert.equal(called,false);
+  await assert.rejects(send(details,async(_url,{signal})=>new Promise((_resolve,reject)=>signal.addEventListener('abort',()=>reject(Error('Aborted')))),5),error=>error.code==='uncertain');
+  sandbox.window.STUDIO_CONFIG.formSubmitId='0123456789abcdef0123456789abcdef';
+  sandbox.window.STUDIO_CONFIG.email='contact@brainfor.net';
+  assert.equal((await send(details,async(url)=>{assert.equal(url,'https://formsubmit.co/ajax/0123456789abcdef0123456789abcdef');return {ok:true,json:async()=>({success:true})};})).status,'accepted');
+  sandbox.window.STUDIO_CONFIG.formSubmitId='invalid/path';
+  await assert.rejects(send(details,async()=>{throw Error('Must not call');}),error=>error.code==='configuration');
+  console.log('10 checks passed, including anonymous destination ID and invalid endpoint rejection. No email sent.');
+})().catch(error=>{console.error(error);process.exitCode=1;});

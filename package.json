@@ -1,0 +1,12 @@
+{
+  "name": "brainfor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site Brainfor — ingénierie informatique et développement sur mesure",
+  "scripts": {
+    "test": "node tests/contact-send.test.cjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
