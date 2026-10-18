@@ -21,9 +21,6 @@
   $$('.nav a').forEach(link => link.addEventListener('click', () => { menu.setAttribute('aria-expanded', 'false'); menu.setAttribute('aria-label', 'Open menu'); $('.nav').classList.remove('open'); }));
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') { menu.click(); menu.focus(); } });
   $('#year').textContent = new Date().getFullYear();
-  $$('.language-switch a').forEach(link => link.addEventListener('click', () => {
-    if (window.location.hash) link.hash = window.location.hash;
-  }));
   const services = {
     web: { title:'Websites & web applications', description:'Your online presence should have a purpose: building awareness, selling or simplifying a service. We create a consistent experience, from the first visit to the actions that matter.', deliverables:['Business website and service catalogue','Online shop and ordering journey','Customer portal or business application','An interface for mobile and desktop','SEO structure and accessible content','Deployment and documentation'], note:'Payments, hosting, domain names and third-party services are assessed and priced according to your needs. Integrations depend on availability and provider terms.', choice:'Website or web application' },
     mobile: { title:'Mobile applications', description:'Booking, delivery, customer accounts or field tools: bring your service closer to users with an enjoyable application tailored to their needs.', deliverables:['User journeys and interactive mockups','Android and iOS application according to scope','Connection to your services and APIs','Notifications and native features as needed','Testing for target devices and use cases','Preparation for app store submission'], note:'Developer accounts, store approval and any third-party fees are specified in the proposal. Offline behaviour is agreed when defining the scope.', choice:'Mobile application' },

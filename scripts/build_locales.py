@@ -67,7 +67,7 @@ base = re.sub(r'<html[^>]*>', '<html lang="fr" dir="ltr">', base, count=1)
 base = re.sub(r'<link rel="stylesheet" href="/style.css[^\"]*">', '<link rel="stylesheet" href="/style.css?v=languages-1">', base)
 if 'href="/languages.css' not in base:
     base = base.replace('<link rel="stylesheet" href="/style.css?v=languages-1">', '<link rel="stylesheet" href="/style.css?v=languages-1">\n  <link rel="stylesheet" href="/languages.css?v=languages-1">')
-base = re.sub(r'<script src="/app.js[^\"]*" defer></script>', '<script src="/app.js?v=languages-1" defer></script>', base)
+base = re.sub(r'<script src="/app.js[^\"]*" defer></script>', '<script src="/app.js?v=languages-2" defer></script>', base)
 base = base.replace('<input name="name"', '<input dir="auto" name="name"').replace('<input name="company"', '<input dir="auto" name="company"')
 base = base.replace('<input type="email"', '<input dir="ltr" type="email"').replace('<input name="phone"', '<input dir="ltr" name="phone"')
 base = base.replace('<textarea id="message"', '<textarea dir="auto" id="message"')
@@ -91,7 +91,7 @@ for lang, path in LANGUAGES.items():
     page = re.sub(r'(<meta property="og:locale" content=")[^\"]+', r'\g<1>' + locale, page)
     if lang != 'fr':
         page = page.replace('brainfor-social-v1.png', 'brainfor-social-' + lang + '-v1.png')
-        page = page.replace('/app.js?v=languages-1', path + 'app.js?v=languages-1')
+        page = page.replace('/app.js?v=languages-2', path + 'app.js?v=languages-2')
         localized_app = app.replace("commande${visible.length > 1 ? 's' : ''}", 'commande(s)')
         localized_app = pattern.sub(lambda match: copy[match.group(0)][lang], localized_app)
         localized_app = localized_app.replace("'fr-DZ'", "'" + ('ar-DZ' if lang == 'ar' else 'en-DZ') + "'").replace("'fr'", "'" + lang + "'")

@@ -2,7 +2,7 @@
 
 ## Langues et référencement international
 
-Trois versions HTML complètes sont publiées : français à `/`, anglais à `/en/` et arabe à `/ar/`. Le sélecteur FR / EN / العربية est accessible dans l’en-tête, conserve la section courante lors d’un changement de langue et utilise de vrais liens explorables. Aucun changement automatique selon l’IP ou le navigateur.
+Trois versions HTML complètes sont publiées : français à `/`, anglais à `/en/` et arabe à `/ar/`. Le sélecteur FR / EN / العربية est accessible dans l’en-tête, ouvre le haut de la page dans la langue choisie et utilise de vrais liens explorables. Aucun changement automatique selon l’IP ou le navigateur.
 
 Les traductions couvrent le contenu, la navigation, les attributs accessibles, les formulaires et leurs briefs, les détails de prestations, les démonstrations, les messages d’erreur, les mentions légales et la confidentialité. Les noms de marques, les captures de produits originaux et les identifiants techniques ne sont pas traduits. L’arabe utilise `lang="ar"`, `dir="rtl"`, une feuille de style adaptée et une direction isolée pour les e-mails et téléphones.
 

@@ -21,9 +21,6 @@
   $$('.nav a').forEach(link => link.addEventListener('click', () => { menu.setAttribute('aria-expanded', 'false'); menu.setAttribute('aria-label', 'افتح القائمة'); $('.nav').classList.remove('open'); }));
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') { menu.click(); menu.focus(); } });
   $('#year').textContent = new Date().getFullYear();
-  $$('.language-switch a').forEach(link => link.addEventListener('click', () => {
-    if (window.location.hash) link.hash = window.location.hash;
-  }));
   const services = {
     web: { title:'المواقع وتطبيقات الويب', description:'ينبغي أن يخدم حضوركم الرقمي هدفًا: التعريف بكم أو البيع أو تبسيط خدمة. نبني تجربة متكاملة، من الزيارة الأولى إلى الإجراءات الأساسية.', deliverables:['موقع تعريفي ودليل للخدمات','متجر إلكتروني ومسار الطلب','بوابة للعملاء أو تطبيق أعمال','واجهة مناسبة للهاتف والحاسوب','بنية ملائمة لمحركات البحث ومحتوى متاح للجميع','الإطلاق والتوثيق'], note:'تُدرس المدفوعات والاستضافة وأسماء النطاقات وخدمات الأطراف الثالثة وتُحدَّد تكلفتها حسب الحاجة. ويتوقف التكامل على توافرها وشروط مقدّميها.', choice:'موقع أو تطبيق ويب' },
     mobile: { title:'تطبيقات الهاتف', description:'الحجز والتوصيل وحسابات العملاء والأدوات الميدانية: قرّبوا خدماتكم من المستخدمين بتطبيق مريح يناسب احتياجاتهم.', deliverables:['رحلات المستخدم ونماذج تفاعلية','تطبيق Android وiOS حسب نطاق المشروع','الربط بخدماتكم وواجهات API','إشعارات ووظائف أصلية حسب الحاجة','اختبارات للأجهزة والاستخدامات المستهدفة','التحضير للنشر في متاجر التطبيقات'], note:'تُوضَّح حسابات المطوّرين وموافقات المتاجر ورسوم الأطراف الثالثة المحتملة في المقترح. ويُحدَّد العمل دون اتصال عند ضبط نطاق المشروع.', choice:'تطبيق هاتف' },
