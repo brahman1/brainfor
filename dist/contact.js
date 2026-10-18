@@ -24,7 +24,8 @@
         body:JSON.stringify(payload), credentials:'omit', signal:controller.signal
       });
       const body = await response.json();
-      if (!response.ok) throw fail('rejected', 'Le service n’a pas confirmé la prise en charge.');
+      const knownCodes = ['origin', 'configuration', 'validation', 'invalid_email', 'provider_origin', 'provider_protection', 'rate_limited', 'provider_timeout', 'provider_unavailable', 'provider_rejected'];
+      if (!response.ok) throw fail(knownCodes.includes(body.code) ? body.code : 'rejected', 'Le service n’a pas confirmé la prise en charge.');
       if (/activat|confirm.{0,30}e.?mail|check.{0,30}e.?mail|verify.{0,30}e.?mail/i.test(String(body.message || ''))) return {status:'activation'};
       if (body.success !== true && body.success !== 'true') throw fail('rejected', 'Le service n’a pas accepté la demande.');
       return {status:'accepted'};

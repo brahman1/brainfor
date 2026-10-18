@@ -99,7 +99,19 @@
           }
         } catch (error) {
           sendStatus.dataset.state = 'error';
-          sendStatus.textContent = error.code === 'validation' ? 'La demande n’a pas pu être validée. Vérifiez vos informations et conservez votre brief si nécessaire.' : 'L’envoi n’a pas pu être confirmé. Votre brief est conservé. Vous pouvez réessayer ou conserver votre brief pour un nouvel envoi ultérieur.';
+          const errors = {
+            validation: 'Vérifiez votre nom, votre adresse e-mail et la description du projet (20 caractères minimum).',
+            invalid_email: 'Le service a refusé l’adresse e-mail saisie. Utilisez une véritable adresse à laquelle vous pouvez recevoir notre réponse.',
+            configuration: 'La réception des demandes doit être configurée par Brainfor.',
+            origin: 'L’origine de la demande n’a pas été reconnue. Ouvrez le formulaire sur https://brainfor.net.',
+            provider_origin: 'FormSubmit n’a pas reconnu l’origine du formulaire. Brainfor doit corriger le raccordement au service.',
+            provider_protection: 'La protection antispam de FormSubmit a bloqué cet envoi. La demande n’est pas confirmée.',
+            rate_limited: 'Le service limite temporairement les envois. Patientez avant de réessayer.',
+            provider_timeout: 'FormSubmit n’a pas répondu dans le délai prévu. Avant de réessayer, vérifiez si la demande a été reçue pour éviter un doublon.',
+            provider_unavailable: 'FormSubmit est momentanément inaccessible depuis le serveur. L’envoi n’est pas confirmé.',
+            provider_rejected: 'FormSubmit a refusé la demande. Le raccordement au service nécessite une vérification par Brainfor.'
+          };
+          sendStatus.textContent = (errors[error.code] || 'L’envoi n’a pas pu être confirmé.') + ' Votre brief est conservé. Vous pouvez le télécharger ou le copier.';
           sendButton.textContent = 'Réessayer l’envoi ↗';
           sendButton.disabled = false;
         } finally {
