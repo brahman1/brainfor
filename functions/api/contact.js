@@ -62,16 +62,16 @@ export async function onRequest({ request, env }) {
       console.warn('contact_provider_non_json', { status: upstream.status });
       return reply({ success: false, code: 'provider_unavailable' }, 502);
     }
-    const message = String(result?.message || '');
-    if (upstream.ok && /activat|confirm.{0,30}e.?mail|check.{0,30}e.?mail|verify.{0,30}e.?mail/i.test(message)) {
+    const providerMessage = String(result?.message || '');
+    if (upstream.ok && /activat|confirm.{0,30}e.?mail|check.{0,30}e.?mail|verify.{0,30}e.?mail/i.test(providerMessage)) {
       return reply({ success: false, message: 'activation required' });
     }
     if (!upstream.ok || (result?.success !== true && result?.success !== 'true')) {
       let code = 'provider_rejected';
-      if (/invalid.{0,40}email|email.{0,40}invalid|valid.{0,20}email/i.test(message)) code = 'invalid_email';
-      else if (/referer|referrer|web.?server|file:\/\//i.test(message)) code = 'provider_origin';
-      else if (/captcha|robot|bot|spam/i.test(message)) code = 'provider_protection';
-      else if (upstream.status === 429 || /limit|too many/i.test(message)) code = 'rate_limited';
+      if (/invalid.{0,40}email|email.{0,40}invalid|valid.{0,20}email/i.test(providerMessage)) code = 'invalid_email';
+      else if (/referer|referrer|web.?server|file:\/\//i.test(providerMessage)) code = 'provider_origin';
+      else if (/captcha|robot|bot|spam/i.test(providerMessage)) code = 'provider_protection';
+      else if (upstream.status === 429 || /limit|too many/i.test(providerMessage)) code = 'rate_limited';
       // Log only a classification and HTTP status, never the message or addresses.
       console.warn('contact_provider_rejected', { status: upstream.status, code });
       return reply({ success: false, code }, 502);
