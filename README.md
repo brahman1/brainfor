@@ -41,6 +41,12 @@ Le formulaire passe par Cloudflare et la messagerie de réception. Aucune base d
 
 La sélection de texte utilise un fond bleu clair et du texte bleu marine, sur les pages et dans les briefs. Les fichiers CSS et scripts portent une version dans leur URL pour éviter les anciennes ressources en cache. Le PNG original du logo est conservé dans `dist/assets/brainfor-monogram.png`.
 
+## Référencement Google
+
+La page contient la balise de vérification Search Console fournie par le propriétaire, une URL canonique `https://brainfor.net/`, la directive `index, follow` et les métadonnées Open Graph du domaine. `dist/robots.txt` autorise l’exploration du contenu, exclut `/api/` et annonce `https://brainfor.net/sitemap.xml`. Le sitemap contient uniquement l’URL canonique de la page : les sections `#expertises`, `#projets`, etc. ne sont pas des pages distinctes.
+
+Après publication, valider la propriété Search Console correspondant à `https://brainfor.net/`, puis soumettre `sitemap.xml`. La vérification par balise HTML s’applique à une propriété de type préfixe d’URL ; une propriété de domaine utilise une vérification DNS. L’ajout de ces fichiers ne garantit ni une indexation immédiate ni un classement dans Google.
+
 ## Informations à compléter
 
 Coordonnées et immatriculation de l’entreprise, mentions légales, modalités de service. Les concepts interactifs restent des démonstrations fictives. Les polices Inter et Space Grotesk sont chargées depuis Google Fonts.
