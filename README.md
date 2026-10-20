@@ -4,6 +4,8 @@
 
 Présentation du pilote ERP 0.5 : `/erp/`, `/en/erp/` et `/ar/erp/`, avec liens depuis les réalisations, canonical et hreflang réciproques, métadonnées sociales, données structurées et sitemap. Les contenus sont maintenus dans `scripts/build_erp.py`, appelé par `scripts/build_locales.py`.
 
+L’accueil présente les deux activités : développement sur mesure et édition de Brainfor ERP sous licence. L’ERP figure dans le menu, dans les actions du premier écran et dans une section dédiée immédiatement après le premier écran. Les pages produit réutilisent `style.css` et `languages.css` : même logo SVG recadré, typographie, palette, boutons, rythmes de sections et contrôles de langue. `erp.css` apporte uniquement les composants produit et leur adaptation mobile. Les tarifs de licence permanente affichés reprennent le catalogue initial validé dans le projet ERP (Starter 29 900 DA, Business 69 900 DA, Enterprise à partir de 149 000 DA) ; toute évolution du catalogue commercial doit être reportée dans `scripts/build_erp.py`. La demande de licence passe par le même formulaire de démonstration, sans paiement en ligne.
+
 « Demander une démonstration » ouvre le formulaire existant dans la langue choisie avec `?product=brainfor-erp#contact`. `dist/erp-contact.js` préremplit uniquement un champ de description vide ; le visiteur complète ses coordonnées et confirme l’envoi par le parcours habituel. Aucun message n’est envoyé automatiquement. La page ne publie aucun installateur, accès local, compte, clé ou fichier de l’ERP. Le SaaS est annoncé comme non ouvert et les limites du pilote sont indiquées.
 
 ## Langues et référencement international

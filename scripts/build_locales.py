@@ -62,6 +62,9 @@ class Localize(HTMLParser):
 
 base = (DIST / 'index.html').read_text(encoding='utf-8')
 base = re.sub(r'\s*<!-- erp-feature -->.*?<!-- /erp-feature -->', '', base, flags=re.S)
+base = re.sub(r'<!-- erp-(nav|hero-action) -->.*?<!-- /erp-\1 -->', '', base, flags=re.S)
+base = base.replace('Développement logiciel, applications web et mobiles.', 'Développement sur mesure, web et mobile.')
+base = base.replace('Des solutions conçues avec méthode, pour durer.', 'Et Brainfor ERP, notre logiciel de gestion sous licence.')
 base = re.sub(r'\n?<!-- multilingual-head -->.*?<!-- /multilingual-head -->\n?', '\n', base, flags=re.S)
 base = re.sub(r'<!-- language-switch -->.*?<!-- /language-switch -->', '', base, flags=re.S)
 base = re.sub(r'<html[^>]*>', '<html lang="fr" dir="ltr">', base, count=1)
