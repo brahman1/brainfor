@@ -61,6 +61,7 @@ class Localize(HTMLParser):
     def handle_comment(self, text): self.output.append('<!--' + text + '-->')
 
 base = (DIST / 'index.html').read_text(encoding='utf-8')
+base = re.sub(r'\s*<!-- erp-feature -->.*?<!-- /erp-feature -->', '', base, flags=re.S)
 base = re.sub(r'\n?<!-- multilingual-head -->.*?<!-- /multilingual-head -->\n?', '\n', base, flags=re.S)
 base = re.sub(r'<!-- language-switch -->.*?<!-- /language-switch -->', '', base, flags=re.S)
 base = re.sub(r'<html[^>]*>', '<html lang="fr" dir="ltr">', base, count=1)
@@ -131,3 +132,7 @@ links += '\n    <xhtml:link rel="alternate" hreflang="x-default" href="' + ORIGI
 sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
 for path in LANGUAGES.values(): sitemap += '\n  <url>\n    <loc>' + ORIGIN + path + '</loc>' + links + '\n  </url>'
 (DIST / 'sitemap.xml').write_text(sitemap + '\n</urlset>\n', encoding='utf-8')
+
+# Product pages and their homepage entry points share the same generation step.
+from build_erp import build as build_erp
+build_erp()

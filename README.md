@@ -1,5 +1,11 @@
 # Brainfor
 
+## Brainfor ERP
+
+Présentation du pilote ERP 0.5 : `/erp/`, `/en/erp/` et `/ar/erp/`, avec liens depuis les réalisations, canonical et hreflang réciproques, métadonnées sociales, données structurées et sitemap. Les contenus sont maintenus dans `scripts/build_erp.py`, appelé par `scripts/build_locales.py`.
+
+« Demander une démonstration » ouvre le formulaire existant dans la langue choisie avec `?product=brainfor-erp#contact`. `dist/erp-contact.js` préremplit uniquement un champ de description vide ; le visiteur complète ses coordonnées et confirme l’envoi par le parcours habituel. Aucun message n’est envoyé automatiquement. La page ne publie aucun installateur, accès local, compte, clé ou fichier de l’ERP. Le SaaS est annoncé comme non ouvert et les limites du pilote sont indiquées.
+
 ## Langues et référencement international
 
 Trois versions HTML complètes sont publiées : français à `/`, anglais à `/en/` et arabe à `/ar/`. Le sélecteur FR / EN / العربية est accessible dans l’en-tête, ouvre le haut de la page dans la langue choisie et utilise de vrais liens explorables. Aucun changement automatique selon l’IP ou le navigateur.

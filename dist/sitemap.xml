@@ -21,4 +21,7 @@
     <xhtml:link rel="alternate" hreflang="ar" href="https://brainfor.net/ar/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://brainfor.net/"/>
   </url>
+  <url><loc>https://brainfor.net/erp/</loc><xhtml:link rel="alternate" hreflang="fr" href="https://brainfor.net/erp/"/><xhtml:link rel="alternate" hreflang="en" href="https://brainfor.net/en/erp/"/><xhtml:link rel="alternate" hreflang="ar" href="https://brainfor.net/ar/erp/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://brainfor.net/erp/"/></url>
+  <url><loc>https://brainfor.net/en/erp/</loc><xhtml:link rel="alternate" hreflang="fr" href="https://brainfor.net/erp/"/><xhtml:link rel="alternate" hreflang="en" href="https://brainfor.net/en/erp/"/><xhtml:link rel="alternate" hreflang="ar" href="https://brainfor.net/ar/erp/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://brainfor.net/erp/"/></url>
+  <url><loc>https://brainfor.net/ar/erp/</loc><xhtml:link rel="alternate" hreflang="fr" href="https://brainfor.net/erp/"/><xhtml:link rel="alternate" hreflang="en" href="https://brainfor.net/en/erp/"/><xhtml:link rel="alternate" hreflang="ar" href="https://brainfor.net/ar/erp/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://brainfor.net/erp/"/></url>
 </urlset>
