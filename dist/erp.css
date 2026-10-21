@@ -1,4 +1,5 @@
 /* Product pages deliberately share style.css and languages.css with the studio. */
+.erp-page .dazo-symbol{width:min(100%,256px);height:auto;filter:drop-shadow(0 14px 20px #132d4910)}
 .erp-nav-link{font-weight:700;color:var(--steel)}
 .hero-actions{flex-wrap:wrap}.hero-actions .erp-hero-link{order:1;padding:5px 0;border-bottom:1px solid #c5d5e3}.hero-actions .erp-hero-link:after{content:none}
 .erp-spotlight{background:var(--navy);color:#fff;padding:88px 0}
