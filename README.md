@@ -1,5 +1,9 @@
 # Brainfor
 
+## Captures EduBest
+
+La fiche EduBest des réalisations présente le site web et l’application Android, avec une galerie HTML native traduite dans les trois langues. `dist/assets/edubest-web.png` est une capture de l’accueil local actuel (port 3120). Les captures `edubest-dashboard.png` et `edubest-app.png` proviennent des captures existantes `theme-v3-app-dashboard.png` et `theme-v3-app-mobile.png` du projet EduBest : gestion avec données fictives et aperçu de l’export web Expo de l’application. Elles ne constituent pas une validation sur appareil Android physique. Aucun compte, donnée réelle ou adresse locale n’est publié sur la fiche. Le statut indique une mise en ligne à venir. `dist/portfolio.css` gère la composition et la galerie ; les légendes sont dans `locales/static.tsv`.
+
 ## DAZO
 
 Présentation du pilote DAZO 0.5.1 : `/erp/`, `/en/erp/` et `/ar/erp/`, avec liens depuis les réalisations, canonical et hreflang réciproques, métadonnées sociales, données structurées et sitemap. Les contenus sont maintenus dans `scripts/build_erp.py`, appelé par `scripts/build_locales.py`.
