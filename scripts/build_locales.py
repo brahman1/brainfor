@@ -61,18 +61,21 @@ class Localize(HTMLParser):
     def handle_comment(self, text): self.output.append('<!--' + text + '-->')
 
 base = (DIST / 'index.html').read_text(encoding='utf-8')
+base = re.sub(r'\s*<!-- siyano-feature -->.*?<!-- /siyano-feature -->', '', base, flags=re.S)
+base = re.sub(r'<!-- siyano-nav -->.*?<!-- /siyano-nav -->', '', base, flags=re.S)
 base = re.sub(r'\s*<!-- erp-feature -->.*?<!-- /erp-feature -->', '', base, flags=re.S)
 base = re.sub(r'<!-- erp-(nav|hero-action) -->.*?<!-- /erp-\1 -->', '', base, flags=re.S)
 base = base.replace('Et Brainfor ERP, notre logiciel de gestion sous licence.', 'Et DAZO, notre logiciel de gestion sous licence.')
 base = base.replace('Développement logiciel, applications web et mobiles.', 'Développement sur mesure, web et mobile.')
 base = base.replace('Des solutions conçues avec méthode, pour durer.', 'Et DAZO, notre logiciel de gestion sous licence.')
+base = base.replace('Et DAZO, notre logiciel de gestion sous licence.', 'DAZO et SIYANO, nos logiciels professionnels sous licence.')
 base = re.sub(r'\n?<!-- multilingual-head -->.*?<!-- /multilingual-head -->\n?', '\n', base, flags=re.S)
 base = re.sub(r'<!-- language-switch -->.*?<!-- /language-switch -->', '', base, flags=re.S)
 base = re.sub(r'<html[^>]*>', '<html lang="fr" dir="ltr">', base, count=1)
 base = re.sub(r'<link rel="stylesheet" href="/style.css[^\"]*">', '<link rel="stylesheet" href="/style.css?v=languages-1">', base)
 if 'href="/languages.css' not in base:
     base = base.replace('<link rel="stylesheet" href="/style.css?v=languages-1">', '<link rel="stylesheet" href="/style.css?v=languages-1">\n  <link rel="stylesheet" href="/languages.css?v=languages-1">')
-base = re.sub(r'<script src="/app.js[^\"]*" defer></script>', '<script src="/app.js?v=languages-2" defer></script>', base)
+base = re.sub(r'<script src="/app.js[^\"]*" defer></script>', '<script src="/app.js?v=languages-3" defer></script>', base)
 base = base.replace('<input name="name"', '<input dir="auto" name="name"').replace('<input name="company"', '<input dir="auto" name="company"')
 base = base.replace('<input type="email"', '<input dir="ltr" type="email"').replace('<input name="phone"', '<input dir="ltr" name="phone"')
 base = base.replace('<textarea id="message"', '<textarea dir="auto" id="message"')
@@ -96,7 +99,7 @@ for lang, path in LANGUAGES.items():
     page = re.sub(r'(<meta property="og:locale" content=")[^\"]+', r'\g<1>' + locale, page)
     if lang != 'fr':
         page = page.replace('brainfor-social-v1.png', 'brainfor-social-' + lang + '-v1.png')
-        page = page.replace('/app.js?v=languages-2', path + 'app.js?v=languages-2')
+        page = page.replace('/app.js?v=languages-3', path + 'app.js?v=languages-3')
         localized_app = app.replace("commande${visible.length > 1 ? 's' : ''}", 'commande(s)')
         localized_app = pattern.sub(lambda match: copy[match.group(0)][lang], localized_app)
         localized_app = localized_app.replace("'fr-DZ'", "'" + ('ar-DZ' if lang == 'ar' else 'en-DZ') + "'").replace("'fr'", "'" + lang + "'")
@@ -104,6 +107,8 @@ for lang, path in LANGUAGES.items():
         # Keep a separator between the formatted amount and its currency.
         localized_app = localized_app.replace(" + 'د.ج'", " + ' د.ج'").replace(" + 'DZD'", " + ' DZD'")
         localized_app = localized_app.replace('mon-projet-brainfor.txt', 'brainfor-project-brief-' + lang + '.txt')
+        if lang == 'ar':
+            localized_app = localized_app.replace("new Intl.NumberFormat('ar-DZ').format(value)", "'\\u2066' + new Intl.NumberFormat('fr-DZ').format(value).replace(/\\s/g, '\\u00a0') + '\\u2069'")
         (DIST / lang).mkdir(exist_ok=True)
         (DIST / lang / 'app.js').write_text(localized_app, encoding='utf-8')
     alternates = '\n'.join('  <link rel="alternate" hreflang="' + code + '" href="' + ORIGIN + target + '">' for code, target in LANGUAGES.items())
@@ -140,3 +145,7 @@ for path in LANGUAGES.values(): sitemap += '\n  <url>\n    <loc>' + ORIGIN + pat
 # Product pages and their homepage entry points share the same generation step.
 from build_erp import build as build_erp
 build_erp()
+from build_products import build as build_products
+build_products()
+from rtl_numbers import build as build_rtl_numbers
+build_rtl_numbers(DIST)

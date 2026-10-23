@@ -1,5 +1,11 @@
 # Brainfor
 
+## SIYANO et nombres en arabe
+
+SIYANO est présenté comme un logiciel Brainfor de GMAO / maintenance industrielle, avec une page produit `/siyano/`, `/en/siyano/` et `/ar/siyano/`, une offre sur devis et une demande de démonstration préremplie via `?product=siyano#contact`. Les textes et la génération sont dans `scripts/build_products.py`, appelé après DAZO par le générateur des langues. Les logos viennent des assets validés du projet SIYANO 1.0.1. Les fonctions annoncées suivent le périmètre livré ; le navigateur nécessite un accès au serveur et les limites du mobile déconnecté et des intégrations en écriture sont signalées. Aucun prix ou accès SaaS public n’est inventé. Le sitemap inclut les neuf pages avec les alternates réciproques.
+
+`scripts/rtl_numbers.py` isole les groupes numériques dans les textes HTML arabes (LRI/PDI et espaces insécables), sans modifier les scripts, les styles ou les attributs. Les montants dans les balises `bdi` ont une direction LTR explicite pour conserver les milliers, décimales et versions. Les montants interactifs utilisent le même principe. Les valeurs et le texte arabe restent inchangés ; les versions des scripts et styles concernés sont actualisées pour les caches. Cette livraison est effectuée sans tests ni navigateur, conformément à la préférence exprimée.
+
 ## Captures EduBest
 
 La fiche EduBest des réalisations présente le site web et l’application Android, avec une galerie HTML native traduite dans les trois langues. `dist/assets/edubest-web.png` est une capture de l’accueil local actuel (port 3120). Les captures `edubest-dashboard.png` et `edubest-app.png` proviennent des captures existantes `theme-v3-app-dashboard.png` et `theme-v3-app-mobile.png` du projet EduBest : gestion avec données fictives et aperçu de l’export web Expo de l’application. Elles ne constituent pas une validation sur appareil Android physique. Aucun compte, donnée réelle ou adresse locale n’est publié sur la fiche. Le statut indique une mise en ligne à venir. `dist/portfolio.css` gère la composition et la galerie ; les légendes sont dans `locales/static.tsv`.

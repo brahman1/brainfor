@@ -1,4 +1,8 @@
 /* Shared language controls; all versions are complete static HTML pages. */
+/* Keep the entire amount as one left-to-right numeric unit within RTL prose. */
+bdi[dir="ltr"]{direction:ltr;unicode-bidi:isolate;white-space:nowrap;font-variant-numeric:tabular-nums}
+html[dir="rtl"] .erp-price,html[dir="rtl"] .erp-product-price{font-variant-numeric:tabular-nums}
+html[dir="rtl"] input[type="number"]{direction:ltr;text-align:start}
 .nav-wrap{gap:20px}
 .language-switch{display:flex;align-items:center;gap:3px;padding:4px;border:1px solid var(--line);border-radius:8px;flex-shrink:0;background:var(--paper);font-family:Arial,sans-serif}
 .language-switch a{display:inline-flex;align-items:center;justify-content:center;min-width:32px;min-height:32px;padding:3px 7px;border-radius:5px;font-size:11px;font-weight:600;color:var(--ink)}
