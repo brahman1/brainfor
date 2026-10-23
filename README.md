@@ -1,5 +1,11 @@
 # Brainfor
 
+## Présentation commune aux pages
+
+`dist/uniform.css`, chargée en dernier sur les neuf pages, définit les conteneurs, cadres de logos carrés, zones des symboles, typographies, boutons, espacements et points de rupture communs. Les symboles conservent leurs proportions et leurs fonds transparents ; aucune hauteur spécifique à un produit ne prévaut sur les dimensions communes. Les différences de contenu et les variantes de couleur des sections sont conservées.
+
+`scripts/site_chrome.py` reprend l’en-tête et le pied de page traduits de l’accueil pour les pages DAZO et SIYANO, en adaptant les liens, les langues contextuelles et l’état actif. Il ajoute le lien d’évitement sur les pages produit. `dist/site-chrome.js` gère leur menu mobile et les liens vers les mentions et la confidentialité de l’accueil ; les interactions existantes de la landing restent gérées par son script localisé. Les formulaires, tarifs, URL, canonical et sitemap ne changent pas. L’ensemble est généré par `python scripts/build_locales.py`, avant le traitement des nombres arabes. Travail effectué sans tests ni navigateur à la demande du propriétaire.
+
 ## SIYANO et nombres en arabe
 
 SIYANO est présenté comme un logiciel Brainfor de GMAO / maintenance industrielle, avec une page produit `/siyano/`, `/en/siyano/` et `/ar/siyano/`, une offre sur devis et une demande de démonstration préremplie via `?product=siyano#contact`. Les textes et la génération sont dans `scripts/build_products.py`, appelé après DAZO par le générateur des langues. Les logos viennent des assets validés du projet SIYANO 1.0.1. Les fonctions annoncées suivent le périmètre livré ; le navigateur nécessite un accès au serveur et les limites du mobile déconnecté et des intégrations en écriture sont signalées. Aucun prix ou accès SaaS public n’est inventé. Le sitemap inclut les neuf pages avec les alternates réciproques.

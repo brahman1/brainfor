@@ -148,4 +148,6 @@ build_erp()
 from build_products import build as build_products
 build_products()
 from rtl_numbers import build as build_rtl_numbers
+from site_chrome import build as build_site_chrome
+build_site_chrome(DIST)
 build_rtl_numbers(DIST)
