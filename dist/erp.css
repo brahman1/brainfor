@@ -4,7 +4,7 @@
 .siyano-logo-panel{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:35px;background:#fff;border:1px solid #d7e3ed;border-radius:5px;min-height:270px;gap:24px}
 .siyano-logo-panel img{width:100%;height:auto;display:block}.siyano-logo-panel span{color:var(--steel);font-size:12px}
 .siyano-page .siyano-identity{position:relative;min-height:470px}
-.siyano-symbol{display:block;width:100%;height:100%;object-fit:contain;border-radius:15px}
+.siyano-symbol{display:block;width:100%;height:100%;stroke:none;fill:none;filter:drop-shadow(0 14px 20px #132d4910)}
 @media(max-width:680px){.siyano-spotlight{padding-block:55px}.siyano-spotlight h2{font-size:40px}.siyano-logo-panel{padding:25px;min-height:200px}.siyano-page .siyano-identity{min-height:280px}.siyano-page .erp-page-nav a:last-child{max-width:55%}}
 .erp-page .dazo-symbol{width:min(100%,256px);height:auto;filter:drop-shadow(0 14px 20px #132d4910)}
 .erp-nav-link{font-weight:700;color:var(--steel)}
