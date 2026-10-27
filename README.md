@@ -14,7 +14,7 @@ SIYANO est présenté comme un logiciel Brainfor de GMAO / maintenance industrie
 
 ## Captures EduBest
 
-La fiche EduBest des réalisations présente le site web et l’application Android, avec une galerie HTML native traduite dans les trois langues. `dist/assets/edubest-web.png` est une capture de l’accueil local actuel (port 3120). Les captures `edubest-dashboard.png` et `edubest-app.png` proviennent des captures existantes `theme-v3-app-dashboard.png` et `theme-v3-app-mobile.png` du projet EduBest : gestion avec données fictives et aperçu de l’export web Expo de l’application. Elles ne constituent pas une validation sur appareil Android physique. Aucun compte, donnée réelle ou adresse locale n’est publié sur la fiche. Le statut indique une mise en ligne à venir. `dist/portfolio.css` gère la composition et la galerie ; les légendes sont dans `locales/static.tsv`.
+La fiche EduBest des réalisations présente le site web et l’application Android, avec une galerie HTML native traduite dans les trois langues. `dist/assets/edubest-web.png` est une capture de l’accueil local actuel (port 3120). Les captures `edubest-dashboard.png` et `edubest-app.png` proviennent des captures existantes `theme-v3-app-dashboard.png` et `theme-v3-app-mobile.png` du projet EduBest : gestion avec données fictives et aperçu de l’export web Expo de l’application. Elles ne constituent pas une validation sur appareil Android physique. Aucun compte, donnée réelle ou adresse locale n’est publié sur la fiche. Le site EduBest est en ligne à https://edubest.dz/ ; sa fiche affiche le statut et un lien externe explicite. Le statut ne vaut pas publication Android sur un store. `dist/portfolio.css` gère la composition et la galerie ; les légendes sont dans `locales/static.tsv`.
 
 ## DAZO
 

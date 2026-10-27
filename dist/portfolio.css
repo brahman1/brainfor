@@ -1,4 +1,5 @@
 /* Genuine EduBest captures: website, demo dashboard and Expo app preview. */
+.edubest-live{display:flex;align-items:center;gap:7px;color:#375977;font-size:11px;margin:0 0 14px}.edubest-live i{width:5px;height:5px;border-radius:50%;background:#4b759e;flex-shrink:0}
 .edubest-card .edubest-screens{isolation:isolate;background:#e8eef3}
 .edubest-screens>.edubest-web-shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:left top}
 .edubest-phone-shot{position:absolute;inset-inline-end:13px;bottom:12px;height:83%;width:25%;border:4px solid #19394b;border-radius:13px;background:#f5f6fb;overflow:hidden;box-shadow:0 8px 24px #132d4940;z-index:1}
